@@ -2,6 +2,7 @@ package entity
 
 import (
 	"time"
+	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/model/errorenum"
 
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/model/vo"
 )
@@ -27,9 +28,14 @@ func NewTodo(req TodoCreateRequest) (*Todo, error) {
 	}
 
 	// add validation and assignment value here ...
+	if req.Message == "" {
+		return nil, errorenum.MessageMustNotEmpty
+	}
 
 	var obj Todo
 	obj.ID = id
+	obj.Message = req.Message
+	obj.Checked = false
 	obj.Created = req.Now
 
 	return &obj, nil
@@ -42,6 +48,15 @@ type TodoUpdateRequest struct {
 func (r *Todo) Update(req TodoUpdateRequest) error {
 
 	// add validation and assignment value here ...
+
+	return nil
+}
+
+func (r *Todo) Check() error {
+	if r.Checked {
+		return errorenum.TodoHasBeenChecked
+	}
+	r.Checked = true
 
 	return nil
 }
