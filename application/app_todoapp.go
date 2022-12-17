@@ -2,7 +2,7 @@ package application
 
 import (
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/controller/restapi"
-	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/gateway/withgorm"
+	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/gateway/withmongodb"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/getalltodo"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtodocheck"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtodocreate"
@@ -31,7 +31,7 @@ func (todoapp) Run() error {
 
 	jwtToken := token.NewJWTToken(cfg.JWTSecretKey)
 
-	datasource := withgorm.NewGateway(log, appData, cfg)
+	datasource := withmongodb.NewGateway(log, appData, cfg)
 
 	httpHandler := server.NewGinHTTPHandler(log, cfg.Servers[appName].Address, appData)
 
