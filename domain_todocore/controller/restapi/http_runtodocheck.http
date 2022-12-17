@@ -1,5 +1,4 @@
-PUT http://localhost:8001/api/v1/todo/1
+PUT http://localhost:8001/api/v1/todo/OBJ-221217-1GBF7
 
-{ 
-  "todo_id": "", 
+{
 }
