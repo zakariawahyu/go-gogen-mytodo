@@ -78,3 +78,15 @@ func (r *gateway) SaveTodo(ctx context.Context, obj *entity.Todo) error {
 
 	return nil
 }
+
+func (r *gateway) DeleteTodoById(ctx context.Context, todoID vo.TodoID) error {
+	r.log.Info(ctx, "called")
+
+	var todoObj entity.Todo
+
+	if err := r.db.Delete(&todoObj, "id = ? ", todoID).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -2,10 +2,11 @@ package application
 
 import (
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/controller/restapi"
-	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/gateway/withmongodb"
+	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/gateway/withgorm"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/getalltodo"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtodocheck"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtodocreate"
+	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtododelete"
 	"zakariawahyu.com/go-gogen-mytodo/shared/gogen"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/config"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/logger"
@@ -31,7 +32,7 @@ func (todoapp) Run() error {
 
 	jwtToken := token.NewJWTToken(cfg.JWTSecretKey)
 
-	datasource := withmongodb.NewGateway(log, appData, cfg)
+	datasource := withgorm.NewGateway(log, appData, cfg)
 
 	httpHandler := server.NewGinHTTPHandler(log, cfg.Servers[appName].Address, appData)
 
@@ -41,6 +42,7 @@ func (todoapp) Run() error {
 		getalltodo.NewUsecase(datasource),
 		runtodocheck.NewUsecase(datasource),
 		runtodocreate.NewUsecase(datasource),
+		runtododelete.NewUsecase(datasource),
 	)
 	x.RegisterRouter(httpHandler.Router)
 
