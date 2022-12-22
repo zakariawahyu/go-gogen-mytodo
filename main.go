@@ -14,6 +14,7 @@ func main() {
 	appMap := map[string]gogen.Runner{
 		//
 		"todoapp": application.NewTodoapp(),
+		"userapp": application.NewUserapp(),
 	}
 
 	flag.Parse()
