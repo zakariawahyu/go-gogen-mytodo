@@ -8,7 +8,7 @@ import (
 type Inport gogen.Inport[InportRequest, InportResponse]
 
 type InportRequest struct {
-	entity.UserRegisterRequest
+	entity.UserRequest
 }
 
 type InportResponse struct {

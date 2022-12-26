@@ -15,7 +15,7 @@ type User struct {
 	Created  time.Time `bson:"created" json:"created"`
 }
 
-type UserRegisterRequest struct {
+type UserRequest struct {
 	RandomString string    `json:"-"`
 	Now          time.Time `json:"-"`
 	Name         string    `json:"name"`
@@ -23,12 +23,7 @@ type UserRegisterRequest struct {
 	Password     string    `json:"password"`
 }
 
-type UserLoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-func (req UserRegisterRequest) validate() error {
+func (req UserRequest) validate() error {
 	if req.Name == "" {
 		return errorenum.NameMustNotEmpty
 	}
@@ -44,19 +39,7 @@ func (req UserRegisterRequest) validate() error {
 	return nil
 }
 
-func (req UserLoginRequest) validate() error {
-	if req.Email == "" {
-		return errorenum.EmailMustNotEmpty
-	}
-
-	if req.Password == "" {
-		return errorenum.PasswordMustNotEmpty
-	}
-
-	return nil
-}
-
-func NewRegisterUser(req UserRegisterRequest) (*User, error) {
+func NewUser(req UserRequest) (*User, error) {
 
 	id, err := vo.NewUserID(req.RandomString, req.Now)
 	if err != nil {
@@ -73,19 +56,6 @@ func NewRegisterUser(req UserRegisterRequest) (*User, error) {
 	obj.Email = req.Email
 	obj.Password = hashAndSalt([]byte(req.Password))
 	obj.Created = req.Now
-
-	return &obj, nil
-}
-
-func NewLoginUser(req UserLoginRequest) (*User, error) {
-
-	if err := req.validate(); err != nil {
-		return nil, err
-	}
-
-	var obj User
-	obj.Email = req.Email
-	obj.Password = req.Password
 
 	return &obj, nil
 }

@@ -6,7 +6,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"time"
-	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/entity"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/token"
 )
 
@@ -26,22 +25,17 @@ func (r *runuserloginInteractor) Execute(ctx context.Context, req InportRequest)
 
 	res := &InportResponse{}
 
-	obj, err := entity.NewLoginUser(req.UserLoginRequest)
+	userObj, err := r.outport.FindUserByEmail(ctx, req.Email)
 	if err != nil {
 		return nil, err
 	}
 
-	user, err := r.outport.FindUserByEmail(ctx, obj.Email)
-	if err != nil {
-		return nil, err
-	}
-
-	isValidPass := comparePassword(user.Password, []byte(obj.Password))
+	isValidPass := comparePassword(userObj.Password, []byte(req.Password))
 	if !isValidPass {
 		return nil, fmt.Errorf("wrong email and password")
 	}
 
-	token, err := r.token.CreateToken([]byte(user.Email), time.Hour)
+	token, err := r.token.CreateToken([]byte(userObj.Email), time.Hour)
 	if err != nil {
 		return nil, err
 	}

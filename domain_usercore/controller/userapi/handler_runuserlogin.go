@@ -24,7 +24,7 @@ func (r *ginController) runuserloginHandler() gin.HandlerFunc {
 	}
 
 	type response struct {
-		Token string `json:"token"`
+		InportResponse
 	}
 
 	return func(c *gin.Context) {

@@ -19,7 +19,7 @@ func (r *runuserregisterInteractor) Execute(ctx context.Context, req InportReque
 
 	res := &InportResponse{}
 
-	userObj, err := entity.NewRegisterUser(req.UserRegisterRequest)
+	userObj, err := entity.NewUser(req.UserRequest)
 	if err != nil {
 		return nil, err
 	}
