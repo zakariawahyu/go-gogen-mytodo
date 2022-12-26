@@ -7,5 +7,6 @@ import (
 
 type Outport interface {
 	repository.SaveUserRepo
+	repository.FindUserByEmailRepo
 	service.HashAndSaltPasswordServices
 }

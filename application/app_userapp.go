@@ -5,6 +5,7 @@ import (
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/gateway/withgorm"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/getalluser"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/getoneuser"
+	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuseractivated"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuserdelete"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuserlogin"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuserregister"
@@ -46,6 +47,7 @@ func (userapp) Run() error {
 		runuserdelete.NewUsecase(datasource),
 		runuserregister.NewUsecase(datasource),
 		runuserlogin.NewUsecase(datasource, jwtToken),
+		runuseractivated.NewUsecase(datasource),
 	)
 	x.RegisterRouter(httpHandler.Router)
 

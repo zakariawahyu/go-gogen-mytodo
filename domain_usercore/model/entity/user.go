@@ -1,17 +1,21 @@
 package entity
 
 import (
+	"fmt"
+	"github.com/google/uuid"
 	"time"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/errorenum"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/vo"
 )
 
 type User struct {
-	ID       vo.UserID `bson:"_id" json:"id"`
-	Name     string    `json:"name"`
-	Email    string    `json:"email"`
-	Password string    `json:"password"`
-	Created  time.Time `bson:"created" json:"created"`
+	ID              vo.UserID `bson:"_id" json:"id"`
+	Name            string    `json:"name"`
+	Email           string    `json:"email"`
+	Password        string    `json:"password"`
+	Status          bool      `json:"status"`
+	ActivationToken string    `json:"activation_token"`
+	Created         time.Time `bson:"created" json:"created"`
 }
 
 type UserRequest struct {
@@ -55,8 +59,34 @@ func NewUser(req UserRequest) (*User, error) {
 	obj.Email = req.Email
 	obj.Password = req.Password
 	obj.Created = req.Now
+	obj.Status = false
+	obj.ActivationToken = uuid.NewString()
 
 	return &obj, nil
+}
+
+func (user *User) IsActive() bool {
+	return user.Status == true
+}
+
+func (user *User) GetUserData() string {
+	return fmt.Sprintf("%s_%s", user.ID, user.Email)
+}
+
+func (user *User) ActivatedUser() error {
+	if user.Status {
+		return errorenum.UserAlreadyActivated
+	}
+
+	user.Status = true
+	return nil
+}
+
+func (user *User) CompareActivatedToken(activatedToken string) error {
+	if user.ActivationToken != activatedToken {
+		return errorenum.UserActivatedTokenNotMatch
+	}
+	return nil
 }
 
 type UserUpdateRequest struct {

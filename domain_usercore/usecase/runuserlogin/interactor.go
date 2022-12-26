@@ -2,8 +2,8 @@ package runuserlogin
 
 import (
 	"context"
-	"fmt"
 	"time"
+	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/errorenum"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/token"
 )
 
@@ -30,10 +30,15 @@ func (r *runuserloginInteractor) Execute(ctx context.Context, req InportRequest)
 
 	isValidPass := r.outport.ComparePassword(ctx, userObj.Password, []byte(req.Password))
 	if !isValidPass {
-		return nil, fmt.Errorf("wrong email and password")
+		return nil, errorenum.WrongEmailOrPassword
 	}
 
-	token, err := r.token.CreateToken([]byte(userObj.Email), time.Hour)
+	if !userObj.IsActive() {
+		return nil, errorenum.UserIsNotActive
+	}
+
+	userData := userObj.GetUserData()
+	token, err := r.token.CreateToken([]byte(userData), time.Hour)
 	if err != nil {
 		return nil, err
 	}

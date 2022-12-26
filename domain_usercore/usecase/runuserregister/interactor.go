@@ -3,6 +3,7 @@ package runuserregister
 import (
 	"context"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/entity"
+	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/errorenum"
 )
 
 type runuserregisterInteractor struct {
@@ -18,6 +19,15 @@ func NewUsecase(outputPort Outport) Inport {
 func (r *runuserregisterInteractor) Execute(ctx context.Context, req InportRequest) (*InportResponse, error) {
 
 	res := &InportResponse{}
+
+	userExisting, err := r.outport.FindUserByEmail(ctx, req.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	if userExisting != nil {
+		return nil, errorenum.UserAlreadyExist
+	}
 
 	hashPassword, err := r.outport.HashAndSaltPassword(ctx, []byte(req.Password))
 	if err != nil {

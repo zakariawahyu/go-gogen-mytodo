@@ -34,4 +34,5 @@ func (r *ginController) RegisterRouter(router selectedRouter) {
 	resource.DELETE("/user/:user_id", r.authorization(), r.runUserDeleteHandler())
 	resource.POST("/register", r.runuserregisterHandler())
 	resource.POST("/login", r.runuserloginHandler())
+	resource.GET("/activated/:email/:token", r.runuseractivatedHandler())
 }
