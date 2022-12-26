@@ -12,4 +12,5 @@ const (
 	UserIsNotActive            apperror.ErrorType = "ER0006 user is not active"
 	UserAlreadyActivated       apperror.ErrorType = "ER0007 user already activated"
 	UserActivatedTokenNotMatch apperror.ErrorType = "ER0008 user activated token not match"
+	NoTokenProvided            apperror.ErrorType = "ER0009 no token provided"
 )
