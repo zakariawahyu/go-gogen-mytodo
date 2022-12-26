@@ -4,7 +4,6 @@ import (
 	"context"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/entity"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/repository"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/vo"
@@ -18,6 +17,7 @@ type gateway struct {
 	appData gogen.ApplicationData
 	config  *config.Config
 	db      *gorm.DB
+	commonImplementation
 }
 
 // NewGateway ...

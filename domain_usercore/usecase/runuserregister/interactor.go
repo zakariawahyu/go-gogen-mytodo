@@ -19,7 +19,17 @@ func (r *runuserregisterInteractor) Execute(ctx context.Context, req InportReque
 
 	res := &InportResponse{}
 
-	userObj, err := entity.NewUser(req.UserRequest)
+	hashPassword, err := r.outport.HashAndSaltPassword(ctx, []byte(req.Password))
+	if err != nil {
+		return nil, err
+	}
+	userObj, err := entity.NewUser(entity.UserRequest{
+		RandomString: req.RandomString,
+		Now:          req.Now,
+		Name:         req.Name,
+		Password:     hashPassword,
+		Email:        req.Email,
+	})
 	if err != nil {
 		return nil, err
 	}

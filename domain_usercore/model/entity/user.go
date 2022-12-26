@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"golang.org/x/crypto/bcrypt"
 	"time"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/errorenum"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/vo"
@@ -54,7 +53,7 @@ func NewUser(req UserRequest) (*User, error) {
 	obj.ID = id
 	obj.Name = req.Name
 	obj.Email = req.Email
-	obj.Password = hashAndSalt([]byte(req.Password))
+	obj.Password = req.Password
 	obj.Created = req.Now
 
 	return &obj, nil
@@ -69,12 +68,4 @@ func (r *User) Update(req UserUpdateRequest) error {
 	// add validation and assignment value here ...
 
 	return nil
-}
-
-func hashAndSalt(password []byte) string {
-	hash, err := bcrypt.GenerateFromPassword(password, bcrypt.MinCost)
-	if err != nil {
-		panic(err)
-	}
-	return string(hash)
 }

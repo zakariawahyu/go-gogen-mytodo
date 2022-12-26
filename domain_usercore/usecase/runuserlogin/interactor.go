@@ -3,8 +3,6 @@ package runuserlogin
 import (
 	"context"
 	"fmt"
-	"golang.org/x/crypto/bcrypt"
-	"log"
 	"time"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/token"
 )
@@ -30,7 +28,7 @@ func (r *runuserloginInteractor) Execute(ctx context.Context, req InportRequest)
 		return nil, err
 	}
 
-	isValidPass := comparePassword(userObj.Password, []byte(req.Password))
+	isValidPass := r.outport.ComparePassword(ctx, userObj.Password, []byte(req.Password))
 	if !isValidPass {
 		return nil, fmt.Errorf("wrong email and password")
 	}
@@ -43,14 +41,4 @@ func (r *runuserloginInteractor) Execute(ctx context.Context, req InportRequest)
 	res.Token = token
 
 	return res, nil
-}
-
-func comparePassword(hashPass string, plainPass []byte) bool {
-	byteHash := []byte(hashPass)
-	err := bcrypt.CompareHashAndPassword(byteHash, plainPass)
-	if err != nil {
-		log.Println(err.Error())
-		return false
-	}
-	return true
 }
