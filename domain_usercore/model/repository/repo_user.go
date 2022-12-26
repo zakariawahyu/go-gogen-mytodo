@@ -28,3 +28,7 @@ type DeleteUserRepo interface {
 type FindOneUserByIDRepo interface {
 	FindOneUserByID(ctx context.Context, userID vo.UserID) (*entity.User, error)
 }
+
+type FindUserByEmailRepo interface {
+	FindUserByEmail(ctx context.Context, email string) (*entity.User, error)
+}

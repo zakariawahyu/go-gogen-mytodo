@@ -3,20 +3,19 @@ package userapi
 import (
 	"context"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
-	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runusercreate"
+	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuserlogin"
 	"zakariawahyu.com/go-gogen-mytodo/shared/gogen"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/logger"
 	"zakariawahyu.com/go-gogen-mytodo/shared/model/payload"
 	"zakariawahyu.com/go-gogen-mytodo/shared/util"
 )
 
-func (r *ginController) runUserCreateHandler() gin.HandlerFunc {
+func (r *ginController) runuserloginHandler() gin.HandlerFunc {
 
-	type InportRequest = runusercreate.InportRequest
-	type InportResponse = runusercreate.InportResponse
+	type InportRequest = runuserlogin.InportRequest
+	type InportResponse = runuserlogin.InportResponse
 
 	inport := gogen.GetInport[InportRequest, InportResponse](r.GetUsecase(InportRequest{}))
 
@@ -25,7 +24,7 @@ func (r *ginController) runUserCreateHandler() gin.HandlerFunc {
 	}
 
 	type response struct {
-		*InportResponse
+		Token string `json:"token"`
 	}
 
 	return func(c *gin.Context) {
@@ -42,9 +41,8 @@ func (r *ginController) runUserCreateHandler() gin.HandlerFunc {
 		}
 
 		var req InportRequest
-		req = jsonReq.InportRequest
-		req.Now = time.Now()
-		req.RandomString = util.GenerateID(16)
+		req.Email = jsonReq.Email
+		req.Password = jsonReq.Password
 
 		r.log.Info(ctx, util.MustJSON(req))
 
@@ -56,7 +54,7 @@ func (r *ginController) runUserCreateHandler() gin.HandlerFunc {
 		}
 
 		var jsonRes response
-		jsonRes.InportResponse = res
+		jsonRes.Token = res.Token
 
 		r.log.Info(ctx, util.MustJSON(jsonRes))
 		c.JSON(http.StatusOK, payload.NewSuccessResponse(jsonRes, traceID))

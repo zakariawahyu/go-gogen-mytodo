@@ -27,13 +27,11 @@ func NewGinController(log logger.Logger, cfg *config.Config, tk token.JWTToken) 
 }
 
 func (r *ginController) RegisterRouter(router selectedRouter) {
-
-	resource := router.Group("/api/v1", r.authentication())
-
-	resource.POST("/user", r.authorization(), r.runUserCreateHandler())
-	resource.GET("/user", r.authorization(), r.getAllUserHandler())
+	resource := router.Group("/api/v1")
+	resource.GET("/user", r.authentication(), r.authorization(), r.getAllUserHandler())
 	resource.GET("/user/:user_id", r.authorization(), r.getOneUserHandler())
 	resource.PUT("/user/:user_id", r.authorization(), r.runUserUpdateHandler())
 	resource.DELETE("/user/:user_id", r.authorization(), r.runUserDeleteHandler())
-
+	resource.POST("/register", r.runuserregisterHandler())
+	resource.POST("/login", r.runuserloginHandler())
 }

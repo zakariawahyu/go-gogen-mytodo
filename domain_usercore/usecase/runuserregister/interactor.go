@@ -1,28 +1,25 @@
-package runusercreate
+package runuserregister
 
 import (
 	"context"
-
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/entity"
 )
 
-//go:generate mockery --name Outport -output mocks/
-
-type userCreateInteractor struct {
+type runuserregisterInteractor struct {
 	outport Outport
 }
 
 func NewUsecase(outputPort Outport) Inport {
-	return &userCreateInteractor{
+	return &runuserregisterInteractor{
 		outport: outputPort,
 	}
 }
 
-func (r *userCreateInteractor) Execute(ctx context.Context, req InportRequest) (*InportResponse, error) {
+func (r *runuserregisterInteractor) Execute(ctx context.Context, req InportRequest) (*InportResponse, error) {
 
 	res := &InportResponse{}
 
-	userObj, err := entity.NewUser(req.UserCreateRequest)
+	userObj, err := entity.NewRegisterUser(req.UserRegisterRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +29,7 @@ func (r *userCreateInteractor) Execute(ctx context.Context, req InportRequest) (
 		return nil, err
 	}
 
-	res.UserID = userObj.ID
+	res.User = userObj
 
 	return res, nil
 }
