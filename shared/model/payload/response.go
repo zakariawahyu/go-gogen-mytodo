@@ -4,16 +4,21 @@ import (
 	"zakariawahyu.com/go-gogen-mytodo/shared/model/apperror"
 )
 
-type Response struct {
+type SuccessResponse struct {
+	Success bool   `json:"success"`
+	Data    any    `json:"data"`
+	TraceID string `json:"traceId"`
+}
+
+type ErrorResponse struct {
 	Success      bool   `json:"success"`
 	ErrorCode    string `json:"errorCode"`
 	ErrorMessage string `json:"errorMessage"`
-	Data         any    `json:"data"`
 	TraceID      string `json:"traceId"`
 }
 
 func NewSuccessResponse(data any, traceID string) any {
-	var res Response
+	var res SuccessResponse
 	res.Success = true
 	res.Data = data
 	res.TraceID = traceID
@@ -21,7 +26,7 @@ func NewSuccessResponse(data any, traceID string) any {
 }
 
 func NewErrorResponse(err error, traceID string) any {
-	var res Response
+	var res ErrorResponse
 	res.Success = false
 	res.TraceID = traceID
 

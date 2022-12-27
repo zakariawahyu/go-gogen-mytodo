@@ -24,7 +24,7 @@ func (r *ginController) authentication() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("data", string(tokenInBytes))
+		c.Set("currentUser", string(tokenInBytes))
 		return
 	}
 }

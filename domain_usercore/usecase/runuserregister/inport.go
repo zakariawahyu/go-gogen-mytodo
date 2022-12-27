@@ -1,7 +1,9 @@
 package runuserregister
 
 import (
+	"time"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/entity"
+	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/vo"
 	"zakariawahyu.com/go-gogen-mytodo/shared/gogen"
 )
 
@@ -12,5 +14,10 @@ type InportRequest struct {
 }
 
 type InportResponse struct {
-	User *entity.User `json:"user"`
+	ID              vo.UserID `json:"id"`
+	Name            string    `json:"name"`
+	Email           string    `json:"email"`
+	Status          bool      `json:"status"`
+	ActivationToken string    `json:"activation_token"`
+	Created         time.Time `json:"created"`
 }

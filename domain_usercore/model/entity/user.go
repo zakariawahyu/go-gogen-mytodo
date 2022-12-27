@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"fmt"
 	"github.com/google/uuid"
 	"time"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/errorenum"
@@ -70,7 +69,7 @@ func (user *User) IsActive() bool {
 }
 
 func (user *User) GetUserData() string {
-	return fmt.Sprintf("%s_%s", user.ID, user.Email)
+	return user.Email
 }
 
 func (user *User) ActivatedUser() error {

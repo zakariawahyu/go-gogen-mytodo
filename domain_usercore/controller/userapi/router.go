@@ -35,4 +35,5 @@ func (r *ginController) RegisterRouter(router selectedRouter) {
 	resource.POST("/register", r.runuserregisterHandler())
 	resource.POST("/login", r.runuserloginHandler())
 	resource.GET("/activated/:email/:token", r.runuseractivatedHandler())
+	resource.GET("/profile", r.authentication(), r.getprofileHandler())
 }

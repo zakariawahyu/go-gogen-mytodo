@@ -20,10 +20,7 @@ func (r *runuserregisterInteractor) Execute(ctx context.Context, req InportReque
 
 	res := &InportResponse{}
 
-	userExisting, err := r.outport.FindUserByEmail(ctx, req.Email)
-	if err != nil {
-		return nil, err
-	}
+	userExisting, _ := r.outport.FindUserByEmail(ctx, req.Email)
 
 	if userExisting != nil {
 		return nil, errorenum.UserAlreadyExist
@@ -49,7 +46,12 @@ func (r *runuserregisterInteractor) Execute(ctx context.Context, req InportReque
 		return nil, err
 	}
 
-	res.User = userObj
+	res.ID = userObj.ID
+	res.Name = userObj.Name
+	res.Email = userObj.Email
+	res.Status = userObj.Status
+	res.ActivationToken = userObj.ActivationToken
+	res.Created = userObj.Created
 
 	return res, nil
 }
