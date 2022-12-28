@@ -1,4 +1,4 @@
-package runuserregister
+package runupdateuser
 
 import (
 	"time"
@@ -10,7 +10,7 @@ import (
 type Inport gogen.Inport[InportRequest, InportResponse]
 
 type InportRequest struct {
-	entity.UserRequest
+	entity.UserUpdateRequest
 }
 
 type InportResponse struct {

@@ -2,21 +2,20 @@ package userapi
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
-	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/vo"
-	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuserupdate"
+	"net/http"
+	"time"
+	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runupdateuser"
 	"zakariawahyu.com/go-gogen-mytodo/shared/gogen"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/logger"
 	"zakariawahyu.com/go-gogen-mytodo/shared/model/payload"
 	"zakariawahyu.com/go-gogen-mytodo/shared/util"
 )
 
-func (r *ginController) runUserUpdateHandler() gin.HandlerFunc {
+func (r *ginController) runupdateuserHandler() gin.HandlerFunc {
 
-	type InportRequest = runuserupdate.InportRequest
-	type InportResponse = runuserupdate.InportResponse
+	type InportRequest = runupdateuser.InportRequest
+	type InportResponse = runupdateuser.InportResponse
 
 	inport := gogen.GetInport[InportRequest, InportResponse](r.GetUsecase(InportRequest{}))
 
@@ -25,6 +24,7 @@ func (r *ginController) runUserUpdateHandler() gin.HandlerFunc {
 	}
 
 	type response struct {
+		InportResponse
 	}
 
 	return func(c *gin.Context) {
@@ -41,8 +41,11 @@ func (r *ginController) runUserUpdateHandler() gin.HandlerFunc {
 		}
 
 		var req InportRequest
-		req = jsonReq.InportRequest
-		req.UserID = vo.UserID(c.Param("user_id"))
+		req.Name = jsonReq.Name
+		req.CurrentEmail = c.MustGet("currentUser").(string)
+		req.Email = jsonReq.Email
+		req.Password = jsonReq.Password
+		req.Now = time.Now()
 
 		r.log.Info(ctx, util.MustJSON(req))
 
@@ -53,11 +56,8 @@ func (r *ginController) runUserUpdateHandler() gin.HandlerFunc {
 			return
 		}
 
-		var jsonRes response
-		_ = res
-
-		r.log.Info(ctx, util.MustJSON(jsonRes))
-		c.JSON(http.StatusOK, payload.NewSuccessResponse(jsonRes, traceID))
+		r.log.Info(ctx, util.MustJSON(res))
+		c.JSON(http.StatusOK, payload.NewSuccessResponse(res, traceID))
 
 	}
 }

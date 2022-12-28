@@ -6,11 +6,11 @@ import (
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/getalluser"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/getoneuser"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/getprofile"
+	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runupdateuser"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuseractivated"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuserdelete"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuserlogin"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuserregister"
-	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/usecase/runuserupdate"
 	"zakariawahyu.com/go-gogen-mytodo/shared/gogen"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/config"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/logger"
@@ -44,12 +44,12 @@ func (userapp) Run() error {
 	x.AddUsecase(
 		getalluser.NewUsecase(datasource),
 		getoneuser.NewUsecase(datasource),
-		runuserupdate.NewUsecase(datasource),
 		runuserdelete.NewUsecase(datasource),
 		runuserregister.NewUsecase(datasource),
 		runuserlogin.NewUsecase(datasource, jwtToken),
 		runuseractivated.NewUsecase(datasource),
 		getprofile.NewUsecase(datasource),
+		runupdateuser.NewUsecase(datasource),
 	)
 	x.RegisterRouter(httpHandler.Router)
 

@@ -30,10 +30,10 @@ func (r *ginController) RegisterRouter(router selectedRouter) {
 	resource := router.Group("/api/v1")
 	resource.GET("/user", r.authentication(), r.getAllUserHandler())
 	resource.GET("/user/:user_id", r.authentication(), r.getOneUserHandler())
-	resource.PUT("/user/:user_id", r.authentication(), r.runUserUpdateHandler())
 	resource.DELETE("/user/:user_id", r.authentication(), r.runUserDeleteHandler())
 	resource.POST("/register", r.runuserregisterHandler())
 	resource.POST("/login", r.runuserloginHandler())
 	resource.GET("/activated/:email/:token", r.runuseractivatedHandler())
 	resource.GET("/profile", r.authentication(), r.getprofileHandler())
+	resource.PUT("/profile", r.authentication(), r.runupdateuserHandler())
 }

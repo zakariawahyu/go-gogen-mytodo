@@ -15,7 +15,8 @@ type User struct {
 	Password        string    `json:"password"`
 	Status          bool      `json:"status"`
 	ActivationToken string    `json:"activation_token"`
-	Created         time.Time `bson:"created" json:"created"`
+	CreatedAt       time.Time `bson:"created_at" json:"created_at"`
+	UpdatedAt       time.Time `bson:"updated_at" json:"updated_at"`
 }
 
 type UserRequest struct {
@@ -51,7 +52,8 @@ func NewUser(req UserRequest) (*User, error) {
 	obj.Name = req.Name
 	obj.Email = req.Email
 	obj.Password = req.Password
-	obj.Created = req.Now
+	obj.CreatedAt = req.Now
+	obj.UpdatedAt = req.Now
 	obj.Status = false
 	obj.ActivationToken = uuid.NewString()
 
@@ -109,12 +111,33 @@ func NewUserLogin(req UserLoginRequest) (*User, error) {
 }
 
 type UserUpdateRequest struct {
-	// add field to update here ...
+	Now          time.Time `json:"-"`
+	Name         string    `json:"name" validate:"required"`
+	CurrentEmail string    `json:"_"`
+	Email        string    `json:"email" validate:"required,email"`
+	Password     string    `json:"password"`
 }
 
-func (r *User) Update(req UserUpdateRequest) error {
-
-	// add validation and assignment value here ...
-
+func (req UserUpdateRequest) validate() error {
+	validate := validator.New()
+	err := validate.Struct(req)
+	if err != nil {
+		return err
+	}
 	return nil
+}
+
+func NewUserUpdate(req UserUpdateRequest) (*User, error) {
+
+	if err := req.validate(); err != nil {
+		return nil, err
+	}
+
+	var user User
+	user.Name = req.Name
+	user.Email = req.Email
+	user.Password = req.Password
+	user.UpdatedAt = req.Now
+
+	return &user, nil
 }

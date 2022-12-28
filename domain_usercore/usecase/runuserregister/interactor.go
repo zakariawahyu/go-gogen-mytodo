@@ -46,7 +46,8 @@ func (r *runuserregisterInteractor) Execute(ctx context.Context, req InportReque
 	res.Email = userObj.Email
 	res.Status = userObj.Status
 	res.ActivationToken = userObj.ActivationToken
-	res.Created = userObj.Created
+	res.CreatedAt = userObj.CreatedAt
+	res.UpdatedAt = userObj.UpdatedAt
 
 	return res, nil
 }
