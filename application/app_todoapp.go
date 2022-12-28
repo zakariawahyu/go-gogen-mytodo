@@ -7,6 +7,7 @@ import (
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtodocheck"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtodocreate"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtododelete"
+	withgorm2 "zakariawahyu.com/go-gogen-mytodo/domain_usercore/gateway/withgorm"
 	"zakariawahyu.com/go-gogen-mytodo/shared/gogen"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/config"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/logger"
@@ -33,6 +34,7 @@ func (todoapp) Run() error {
 	jwtToken := token.NewJWTToken(cfg.JWTSecretKey)
 
 	datasource := withgorm.NewGateway(log, appData, cfg)
+	datasource2 := withgorm2.NewGateway(log, appData, cfg)
 
 	httpHandler := server.NewGinHTTPHandler(log, cfg.Servers[appName].Address, appData)
 
@@ -41,7 +43,7 @@ func (todoapp) Run() error {
 		//
 		getalltodo.NewUsecase(datasource),
 		runtodocheck.NewUsecase(datasource),
-		runtodocreate.NewUsecase(datasource),
+		runtodocreate.NewUsecase(datasource, datasource2),
 		runtododelete.NewUsecase(datasource),
 	)
 	x.RegisterRouter(httpHandler.Router)

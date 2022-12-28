@@ -2,11 +2,9 @@ package restapi
 
 import (
 	"context"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
-
-	"github.com/gin-gonic/gin"
-	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/model/entity"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtodocreate"
 	"zakariawahyu.com/go-gogen-mytodo/shared/gogen"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/logger"
@@ -26,7 +24,7 @@ func (r *ginController) runTodoCreateHandler() gin.HandlerFunc {
 	}
 
 	type response struct {
-		Todo *entity.Todo `json:"todo"`
+		InportResponse
 	}
 
 	return func(c *gin.Context) {
@@ -45,6 +43,7 @@ func (r *ginController) runTodoCreateHandler() gin.HandlerFunc {
 		var req InportRequest
 		req.Message = jsonReq.Message
 		req.Now = time.Now()
+		req.UserID = c.MustGet("currentUser").(string)
 		req.RandomString = util.GenerateID(5)
 
 		r.log.Info(ctx, util.MustJSON(req))
