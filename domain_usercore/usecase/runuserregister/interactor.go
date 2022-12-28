@@ -20,27 +20,22 @@ func (r *runuserregisterInteractor) Execute(ctx context.Context, req InportReque
 
 	res := &InportResponse{}
 
-	userExisting, _ := r.outport.FindUserByEmail(ctx, req.Email)
+	userObj, err := entity.NewUser(req.UserRequest)
+	if err != nil {
+		return nil, err
+	}
 
+	userExisting, _ := r.outport.FindUserByEmail(ctx, userObj.Email)
 	if userExisting != nil {
 		return nil, errorenum.UserAlreadyExist
 	}
 
-	hashPassword, err := r.outport.HashAndSaltPassword(ctx, []byte(req.Password))
-	if err != nil {
-		return nil, err
-	}
-	userObj, err := entity.NewUser(entity.UserRequest{
-		RandomString: req.RandomString,
-		Now:          req.Now,
-		Name:         req.Name,
-		Password:     hashPassword,
-		Email:        req.Email,
-	})
+	hashPassword, err := r.outport.HashAndSaltPassword(ctx, []byte(userObj.Password))
 	if err != nil {
 		return nil, err
 	}
 
+	userObj.Password = hashPassword
 	err = r.outport.SaveUser(ctx, userObj)
 	if err != nil {
 		return nil, err

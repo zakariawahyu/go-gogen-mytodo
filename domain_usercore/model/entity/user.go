@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"time"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/errorenum"
@@ -20,24 +21,17 @@ type User struct {
 type UserRequest struct {
 	RandomString string    `json:"-"`
 	Now          time.Time `json:"-"`
-	Name         string    `json:"name"`
-	Email        string    `json:"email"`
-	Password     string    `json:"password"`
+	Name         string    `json:"name" validate:"required"`
+	Email        string    `json:"email" validate:"required,email"`
+	Password     string    `json:"password" validate:"required,min=6"`
 }
 
 func (req UserRequest) validate() error {
-	if req.Name == "" {
-		return errorenum.NameMustNotEmpty
+	validate := validator.New()
+	err := validate.Struct(req)
+	if err != nil {
+		return err
 	}
-
-	if req.Email == "" {
-		return errorenum.EmailMustNotEmpty
-	}
-
-	if req.Password == "" {
-		return errorenum.PasswordMustNotEmpty
-	}
-
 	return nil
 }
 
@@ -86,6 +80,32 @@ func (user *User) CompareActivatedToken(activatedToken string) error {
 		return errorenum.UserActivatedTokenNotMatch
 	}
 	return nil
+}
+
+type UserLoginRequest struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=6"`
+}
+
+func (req UserLoginRequest) validate() error {
+	validate := validator.New()
+	err := validate.Struct(req)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func NewUserLogin(req UserLoginRequest) (*User, error) {
+	if err := req.validate(); err != nil {
+		return nil, err
+	}
+
+	var user User
+	user.Email = req.Email
+	user.Password = req.Password
+
+	return &user, nil
 }
 
 type UserUpdateRequest struct {

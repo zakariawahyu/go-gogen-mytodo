@@ -3,6 +3,7 @@ package runuserlogin
 import (
 	"context"
 	"time"
+	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/entity"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/errorenum"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/token"
 )
@@ -23,21 +24,26 @@ func (r *runuserloginInteractor) Execute(ctx context.Context, req InportRequest)
 
 	res := &InportResponse{}
 
-	userObj, err := r.outport.FindUserByEmail(ctx, req.Email)
+	userObj, err := entity.NewUserLogin(req.UserLoginRequest)
 	if err != nil {
 		return nil, err
 	}
 
-	isValidPass := r.outport.ComparePassword(ctx, userObj.Password, []byte(req.Password))
+	userExisting, err := r.outport.FindUserByEmail(ctx, userObj.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	isValidPass := r.outport.ComparePassword(ctx, userExisting.Password, []byte(userObj.Password))
 	if !isValidPass {
 		return nil, errorenum.WrongEmailOrPassword
 	}
 
-	if !userObj.IsActive() {
+	if !userExisting.IsActive() {
 		return nil, errorenum.UserIsNotActive
 	}
 
-	userData := userObj.GetUserData()
+	userData := userExisting.GetUserData()
 	token, err := r.token.CreateToken([]byte(userData), time.Hour)
 	if err != nil {
 		return nil, err
