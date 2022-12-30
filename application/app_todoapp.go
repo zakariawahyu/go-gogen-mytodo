@@ -41,7 +41,7 @@ func (todoapp) Run() error {
 	x := restapi.NewGinController(log, cfg, jwtToken)
 	x.AddUsecase(
 		//
-		getalltodo.NewUsecase(datasource),
+		getalltodo.NewUsecase(datasource, datasource2),
 		runtodocheck.NewUsecase(datasource),
 		runtodocreate.NewUsecase(datasource, datasource2),
 		runtododelete.NewUsecase(datasource),

@@ -13,7 +13,7 @@ type SuccessResponse struct {
 type ErrorResponse struct {
 	Success      bool   `json:"success"`
 	ErrorCode    string `json:"errorCode"`
-	ErrorMessage any    `json:"errorMessage"`
+	ErrorMessage string `json:"errorMessage"`
 	TraceID      string `json:"traceId"`
 }
 

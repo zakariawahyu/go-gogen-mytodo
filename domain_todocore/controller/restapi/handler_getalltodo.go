@@ -45,6 +45,7 @@ func (r *ginController) getAllTodoHandler() gin.HandlerFunc {
 		var req InportRequest
 		req.Page = jsonReq.Page
 		req.Size = jsonReq.Size
+		req.UserID = c.MustGet("currentUser").(string)
 
 		r.log.Info(ctx, util.MustJSON(req))
 

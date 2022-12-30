@@ -23,3 +23,7 @@ type FindOneTodoByIdRepo interface {
 type DeleteTodoByIdRepo interface {
 	DeleteTodoById(ctx context.Context, todoID vo.TodoID) error
 }
+
+type FindAllTodoByUserIDRepo interface {
+	FindAllTodoByUserID(ctx context.Context, page, size int, userID string) ([]*entity.Todo, int64, error)
+}

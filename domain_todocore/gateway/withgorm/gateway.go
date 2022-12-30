@@ -57,6 +57,25 @@ func (r *gateway) FindAllTodo(ctx context.Context, page, size int) ([]*entity.To
 	return todoObjs, count, nil
 }
 
+func (r *gateway) FindAllTodoByUserID(ctx context.Context, page, size int, userID string) ([]*entity.Todo, int64, error) {
+	r.log.Info(ctx, "called")
+
+	var todoObjs []*entity.Todo
+	var count int64
+
+	if err := r.db.
+		Model(entity.Todo{}).
+		Where("user_id = ?", userID).
+		Count(&count).
+		Limit(size).
+		Offset((page - 1) * size).
+		Find(&todoObjs).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return todoObjs, count, nil
+}
+
 func (r *gateway) FindOneTodoById(ctx context.Context, todoID vo.TodoID) (*entity.Todo, error) {
 	r.log.Info(ctx, "called")
 
