@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/model/vo"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtododelete"
 	"zakariawahyu.com/go-gogen-mytodo/shared/gogen"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/logger"
@@ -21,11 +20,11 @@ func (r *ginController) runtododeleteHandler() gin.HandlerFunc {
 	inport := gogen.GetInport[InportRequest, InportResponse](r.GetUsecase(InportRequest{}))
 
 	type request struct {
-		TodoID vo.TodoID `uri:"todo_id"`
+		InportRequest
 	}
 
 	type response struct {
-		Message string `json:"message"`
+		InportResponse
 	}
 
 	return func(c *gin.Context) {

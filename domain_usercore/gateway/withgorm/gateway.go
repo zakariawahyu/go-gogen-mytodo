@@ -80,3 +80,15 @@ func (r *gateway) FindUserByEmail(ctx context.Context, email string) (*entity.Us
 
 	return &objUser, nil
 }
+
+func (r *gateway) FindAllTodoByUser(ctx context.Context, email string) (*entity.User, error) {
+	r.log.Info(ctx, "called")
+
+	var objUser entity.User
+
+	if err := r.db.Preload("Todo").First(&objUser, "email = ?", email).Error; err != nil {
+		return nil, err
+	}
+
+	return &objUser, nil
+}

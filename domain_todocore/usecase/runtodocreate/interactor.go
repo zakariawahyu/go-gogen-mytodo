@@ -2,7 +2,6 @@ package runtodocreate
 
 import (
 	"context"
-	"fmt"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/model/entity"
 )
 
@@ -27,13 +26,10 @@ func (r *runTodoCreateInteractor) Execute(ctx context.Context, req InportRequest
 		return nil, err
 	}
 
-	fmt.Println(todoObj.UserID)
 	user, err := r.outport2.FindUserByEmail(ctx, todoObj.UserID)
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(user.ID.String())
 
 	todoObj.UserID = user.ID.String()
 	err = r.outport.SaveTodo(ctx, todoObj)

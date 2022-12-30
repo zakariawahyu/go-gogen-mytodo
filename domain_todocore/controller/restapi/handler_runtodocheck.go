@@ -5,8 +5,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/model/entity"
-	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/model/vo"
 	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/usecase/runtodocheck"
 	"zakariawahyu.com/go-gogen-mytodo/shared/gogen"
 	"zakariawahyu.com/go-gogen-mytodo/shared/infrastructure/logger"
@@ -22,11 +20,11 @@ func (r *ginController) runTodoCheckHandler() gin.HandlerFunc {
 	inport := gogen.GetInport[InportRequest, InportResponse](r.GetUsecase(InportRequest{}))
 
 	type request struct {
-		TodoID vo.TodoID `uri:"todo_id"`
+		InportRequest
 	}
 
 	type response struct {
-		Todo *entity.Todo `json:"todo"`
+		InportResponse
 	}
 
 	return func(c *gin.Context) {

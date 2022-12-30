@@ -10,7 +10,7 @@ import (
 )
 
 type User struct {
-	ID              vo.UserID     `gorm:"primaryKey" bson:"_id" json:"id"`
+	ID              vo.UserID     `bson:"_id" json:"id"`
 	Name            string        `json:"name"`
 	Email           string        `json:"email"`
 	Password        string        `json:"password"`
