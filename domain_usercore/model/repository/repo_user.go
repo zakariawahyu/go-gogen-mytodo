@@ -32,3 +32,7 @@ type FindOneUserByIDRepo interface {
 type FindUserByEmailRepo interface {
 	FindUserByEmail(ctx context.Context, email string) (*entity.User, error)
 }
+
+type FindAllTodoByUserRepo interface {
+	FindAllTodoByUser(ctx context.Context, email string) (*entity.User, error)
+}

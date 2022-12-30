@@ -7,7 +7,7 @@ import (
 )
 
 type Todo struct {
-	ID        vo.TodoID `bson:"_id" json:"id"`
+	ID        vo.TodoID `gorm:"primaryKey" bson:"_id" json:"id"`
 	UserID    string    `bson:"user_id" json:"user_id"`
 	Message   string    `json:"message"`
 	Checked   bool      `json:"checked"`

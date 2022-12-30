@@ -4,19 +4,21 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"time"
+	"zakariawahyu.com/go-gogen-mytodo/domain_todocore/model/entity"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/errorenum"
 	"zakariawahyu.com/go-gogen-mytodo/domain_usercore/model/vo"
 )
 
 type User struct {
-	ID              vo.UserID `bson:"_id" json:"id"`
-	Name            string    `json:"name"`
-	Email           string    `json:"email"`
-	Password        string    `json:"password"`
-	Status          bool      `json:"status"`
-	ActivationToken string    `json:"activation_token"`
-	CreatedAt       time.Time `bson:"created_at" json:"created_at"`
-	UpdatedAt       time.Time `bson:"updated_at" json:"updated_at"`
+	ID              vo.UserID     `gorm:"primaryKey" bson:"_id" json:"id"`
+	Name            string        `json:"name"`
+	Email           string        `json:"email"`
+	Password        string        `json:"password"`
+	Status          bool          `json:"status"`
+	ActivationToken string        `json:"activation_token"`
+	Todo            []entity.Todo `json:"todo"`
+	CreatedAt       time.Time     `bson:"created_at" json:"created_at"`
+	UpdatedAt       time.Time     `bson:"updated_at" json:"updated_at"`
 }
 
 type UserRequest struct {

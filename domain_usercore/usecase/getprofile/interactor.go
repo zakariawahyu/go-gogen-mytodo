@@ -2,6 +2,7 @@ package getprofile
 
 import (
 	"context"
+	"fmt"
 )
 
 type getprofileInteractor struct {
@@ -18,15 +19,14 @@ func (r *getprofileInteractor) Execute(ctx context.Context, req InportRequest) (
 
 	res := &InportResponse{}
 
-	existingUser, err := r.outport.FindUserByEmail(ctx, req.Email)
+	existingUser, err := r.outport.FindAllTodoByUser(ctx, req.Email)
 	if err != nil {
 		return nil, err
 	}
 
-	res.ID = existingUser.ID
-	res.Name = existingUser.Name
-	res.Email = existingUser.Email
-	res.Status = existingUser.Status
+	fmt.Println(existingUser)
+
+	res.User = existingUser
 
 	return res, nil
 }
